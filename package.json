@@ -1,0 +1,44 @@
+{
+  "name": "cluely-proto-generic-windows",
+  "version": "0.2.0",
+  "description": "Prototipo overlay tipo Cluely - Electron + backend gen\u00e9rico para proveedores de IA (Windows native helpers)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "server": "node server.js",
+    "dist": "electron-builder --win"
+  },
+  "author": "tu nombre",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^2.6.7",
+    "ffi-napi": "^4.0.3",
+    "ref-napi": "^3.0.2"
+  },
+  "devDependencies": {
+    "electron": "^25.0.0",
+    "electron-builder": "^24.6.0"
+  },
+  "build": {
+    "appId": "com.yourcompany.ghostassist",
+    "productName": "GhostAssist",
+    "files": [
+      "**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
