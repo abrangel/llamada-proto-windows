@@ -26,6 +26,9 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
+      - name: Install pkg-config
+        run: choco install pkg-config
+
       - name: Install dependencies
         run: yarn install
 
