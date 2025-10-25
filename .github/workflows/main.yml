@@ -14,17 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # --- PASO AÑADIDO ---
-      # Forzamos el uso de Python 3.11, que es compatible con node-gyp
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '17.x'
+
+      - name: Create dummy log file for windows-build-tools workaround
+        run: echo "Closing installer. Return code: 3010." > %temp%\dd_client_.log.txt
 
       - name: Install windows-build-tools
         run: npm install -g windows-build-tools
