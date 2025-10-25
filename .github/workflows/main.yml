@@ -20,7 +20,11 @@ jobs:
           node-version: '17.x'
 
       - name: Create dummy log file for windows-build-tools workaround
-        run: echo "Closing installer. Return code: 3010." > %temp%\dd_client_.log.txt
+        shell: pwsh
+        run: |
+          $tempDir = [System.IO.Path]::GetTempPath()
+          $logFile = Join-Path $tempDir "dd_client_.log.txt"
+          Set-Content -Path $logFile -Value "Closing installer. Return code: 3010."
 
       - name: Install windows-build-tools
         run: npm install -g windows-build-tools
