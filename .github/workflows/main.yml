@@ -23,23 +23,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install Yarn
+        run: npm install -g yarn
 
-      - name: Install ffi-napi without scripts and patch
-        shell: pwsh
-        run: |
-          npm install ffi-napi --no-save --ignore-scripts
-          cd node_modules/ffi-napi/deps/libffi
-          $file = 'libffi.gyp'
-          $content = Get-Content $file -Raw
-          $content = $content -replace "\'call\',\s*\'preprocess_asm.cmd\'", "\'preprocess_asm.cmd\'"
-          Set-Content $file $content
-          cd ../../../..
-          npx node-gyp rebuild -C node_modules/ffi-napi
+      - name: Install dependencies
+        run: yarn install
 
       - name: Build Electron App
-        run: npm run dist
+        run: yarn dist
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
