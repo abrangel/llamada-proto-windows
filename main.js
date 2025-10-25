@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
 
 function createWindow() {
@@ -9,7 +9,9 @@ function createWindow() {
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true, // Enable context isolation for security
+      nodeIntegration: false // Disable Node.js integration in the renderer process
     }
   });
 
@@ -23,6 +25,11 @@ function createWindow() {
     }
   });
 }
+
+ipcMain.on('question', (event, question) => {
+  // For now, just send back a dummy response
+  event.sender.send('response', `You asked: "${question}"\n\nThis is a dummy response from the main process.`);
+});
 
 app.whenReady().then(() => {
   createWindow();
