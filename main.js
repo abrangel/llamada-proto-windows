@@ -1,86 +1,30 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const fs = require('fs');
-
-let win;
 
 function createWindow() {
-  win = new BrowserWindow({
-    width: 460,
-    height: 220,
-    x: 1000,
-    y: 80,
-    frame: false,
-    transparent: true,
-    alwaysOnTop: true,
-    skipTaskbar: true,
-    resizable: false,
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      nodeIntegration: false
+      preload: path.join(__dirname, 'preload.js')
     }
   });
 
-  try {
-    win.setContentProtection(true);
-  } catch (e) {
-    console.warn('setContentProtection not supported', e);
-  }
-
-  win.loadFile(path.join(__dirname, 'index.html'));
-
-
-
-  // Global shortcuts
-  globalShortcut.register('CommandOrControl+Shift+H', () => {
-    if (!win) return;
-    if (win.isVisible()) win.hide();
-    else win.show();
-  });
-
-  globalShortcut.register('CommandOrControl+Shift+R', () => {
-    if (!win) return;
-    win.webContents.send('show-sample-response', { text: 'Sugerencia generada por IA (demo)' });
-  });
-
-  win.on('closed', () => {
-    win = null;
-  });
+  win.loadFile('index.html');
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
 
-ipcMain.handle('save-settings', async (event, settings) => {
-  // settings: { provider, providerUrl, apiKey, model }
-  const envPath = path.join(app.getPath('userData'), 'settings.json');
-  try {
-    fs.writeFileSync(envPath, JSON.stringify(settings, null, 2), 'utf-8');
-    return { ok: true, path: envPath };
-  } catch (e) {
-    return { ok: false, error: String(e) };
-  }
-});
-
-ipcMain.handle('load-settings', async () => {
-  const envPath = path.join(app.getPath('userData'), 'settings.json');
-  try {
-    if (!fs.existsSync(envPath)) return { ok: true, settings: null };
-    const content = fs.readFileSync(envPath, 'utf-8');
-    return { ok: true, settings: JSON.parse(content) };
-  } catch (e) {
-    return { ok: false, error: String(e) };
-  }
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
 });
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
-
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow();
-});
-
-app.on('will-quit', () => {
-  globalShortcut.unregisterAll();
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
