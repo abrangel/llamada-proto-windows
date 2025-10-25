@@ -30,18 +30,7 @@ function createWindow() {
 
   win.loadFile(path.join(__dirname, 'index.html'));
 
-  // Attempt to call Win32 API for display affinity (Windows only)
-  try {
-    if (process.platform === 'win32') {
-      const { setWindowAffinity } = require('./win32-display');
-      const nativeHandle = win.getNativeWindowHandle();
-      // affinity = 1 (WDA_MONITOR) is broadly supported; experiment if needed.
-      const result = setWindowAffinity(nativeHandle, 1);
-      console.log('setWindowAffinity result:', result);
-    }
-  } catch (e) {
-    console.warn('Error setting window affinity', e);
-  }
+
 
   // Global shortcuts
   globalShortcut.register('CommandOrControl+Shift+H', () => {

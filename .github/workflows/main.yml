@@ -17,20 +17,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '17.x'
-
-      - name: Create dummy log file for windows-build-tools workaround
-        shell: pwsh
-        run: |
-          $tempDir = [System.IO.Path]::GetTempPath()
-          $logFile = Join-Path $tempDir "dd_client_.log.txt"
-          Set-Content -Path $logFile -Value "Closing installer. Return code: 3010."
-
-      - name: Install windows-build-tools
-        run: npm install -g windows-build-tools
+          node-version: '20.x'
 
       - name: Install dependencies
-        shell: cmd
         run: npm install
 
       - name: Build Electron App
