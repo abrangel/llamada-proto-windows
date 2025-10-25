@@ -16,7 +16,7 @@
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "node-fetch": "^2.6.7",
-    "ffi-napi": "^4.0.3",
+    "ffi-napi": "github:abrangel/node-ffi-napi",
     "ref-napi": "^3.0.2"
   },
   "devDependencies": {
