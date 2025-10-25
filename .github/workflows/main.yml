@@ -24,12 +24,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          # Usar '20.x' es una mejor práctica para la versión LTS
-          node-version: '18.x'
-          # cache: 'npm' # DESHABILITADO: Esto causaba el error porque no tienes un 'package-lock.json' en tu repositorio.
-                         # La solución recomendada es generar 'package-lock.json' localmente (con 'npm install') y subirlo a tu repositorio.
+          node-version: '20.x'
 
       - name: Install dependencies
+        shell: cmd
         run: npm install
 
       - name: Build Electron App
