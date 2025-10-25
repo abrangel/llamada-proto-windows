@@ -26,6 +26,9 @@ jobs:
         with:
           node-version: '20.x'
 
+      - name: Install windows-build-tools
+        run: npm install -g windows-build-tools
+
       - name: Install dependencies
         shell: cmd
         run: npm install
