@@ -21,11 +21,22 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install dependencies
-        shell: cmd
-        run: npm install
+        run: npm ci
+
+      - name: Install ffi-napi without scripts and patch
+        shell: pwsh
+        run: |
+          npm install ffi-napi --no-save --ignore-scripts
+          cd node_modules/ffi-napi/deps/libffi
+          $file = 'libffi.gyp'
+          $content = Get-Content $file -Raw
+          $content = $content -replace "\'call\',\s*\'preprocess_asm.cmd\'", "\'preprocess_asm.cmd\'"
+          Set-Content $file $content
+          cd ../../../..
+          npx node-gyp rebuild -C node_modules/ffi-napi
 
       - name: Build Electron App
         run: npm run dist
