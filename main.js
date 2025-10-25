@@ -7,11 +7,14 @@ let serverProcess;
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
+    width: 400,
     height: 600,
+    x: 1200,
+    y: 100,
     frame: false,
-    transparent: true,
+    transparent: false,
     alwaysOnTop: true,
+    resizable: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true, // Enable context isolation for security
@@ -20,6 +23,23 @@ function createWindow() {
   });
 
   win.loadFile('index.html');
+
+  try {
+    win.setContentProtection(true);
+  } catch (e) {
+    console.warn('setContentProtection not supported', e);
+  }
+
+  try {
+    if (process.platform === 'win32') {
+      const { setWindowAffinity } = require('./win32-display');
+      const nativeHandle = win.getNativeWindowHandle();
+      const result = setWindowAffinity(nativeHandle, 1);
+      console.log('setWindowAffinity result:', result);
+    }
+  } catch (e) {
+    console.warn('Error setting window affinity', e);
+  }
 
   globalShortcut.register('CommandOrControl+Shift+H', () => {
     if (win.isVisible()) {

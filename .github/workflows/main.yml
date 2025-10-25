@@ -18,7 +18,13 @@ jobs:
         with:
           node-version: '20.x'
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Install dependencies
+        shell: cmd
         run: npm install
 
       - name: Build Electron App
